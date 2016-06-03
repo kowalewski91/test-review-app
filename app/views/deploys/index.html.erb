@@ -15,6 +15,7 @@
 
         <% @repos.branches user: 'kowalewski91', repo: 'heroku-auto-deploy' do |branch| %>
             <%= branch.name %>
+            <br>
         <% end %>
       </tr>
   </tbody>
