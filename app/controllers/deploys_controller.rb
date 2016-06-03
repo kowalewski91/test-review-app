@@ -4,7 +4,7 @@ class DeploysController < ApplicationController
   # GET /deploys
   # GET /deploys.json
   def index
-
+    @repos = Github::Client::Repos.new
   end
 
   # GET /deploys/1

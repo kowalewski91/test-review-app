@@ -10,13 +10,13 @@
   </thead>
 
   <tbody>
-    <% @deploys.each do |deploy| %>
       <tr>
-        <td><%= link_to 'Show', '#' %></td>
-        <td><%= link_to 'Edit', '#' %></td>
-        <td><%= link_to 'Destroy''#' %></td>
+        <td></td>
+
+        <% @repos.branches user: 'kowalewski91', repo: 'heroku-auto-deploy' do |branch| %>
+            <%= branch.name %>
+        <% end %>
       </tr>
-    <% end %>
   </tbody>
 </table>
 

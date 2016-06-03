@@ -1,12 +1,12 @@
 # DO NOT CHANGE THIS FILE, EDIT CONFIGURATIONS AT application.yml
 default: &default
   adapter:  postgresql
-  database: 'auto-deploy'
+  database: 'auto_deploy'
   encoding: unicode
   host:     'localhost'
   password: 'password'
   pool: '5'
-  database_username: 'auto-deploy'
+  username: 'auto_deploy'
 
 development:
   <<: *default
