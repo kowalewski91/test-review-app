@@ -1,0 +1,16 @@
+#confirmationModal.modal.fade aria-labelledby="myModalLabel" role="dialog" tabindex="-1"
+  .modal-dialog role="document"
+    .modal-content
+      .modal-header
+        button.close aria-label=_('Close') data-dismiss="modal" type="button"
+          span aria-hidden="true"  &times;
+        h4#confirmationModalLabel.modal-title =_('Your account has been confirmed!')
+      .modal-body
+        =_('You can continue to the dashboard or add your first dilemma!')
+      .modal-footer
+        button.btn.btn-default data-dismiss="modal" type="button"=_('Continue')
+        = link_to _('Add dilemma'), new_dilemma_path, class: 'button btn btn-primary'
+javascript:
+  $(window).load(function(){
+    $('#confirmationModal').modal('show');
+  });
