@@ -36,7 +36,7 @@ class DeploysController < ApplicationController
   end
 
   def upload
-    app_name ='jarek-' + @deploy.repository_name
+    app_name =params[:branch_name] + '-' + @deploy.repository_name
     Dir.chdir("/home/czarek/Desktop/repos/#{@deploy.repository_name}") do
       system "git checkout -b #{params[:branch_name]} origin/#{params[:branch_name]}"
       system "heroku fork --from #{@deploy.repository_name} --to #{app_name}"
