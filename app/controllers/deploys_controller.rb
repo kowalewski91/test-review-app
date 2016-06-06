@@ -1,42 +1,51 @@
 class DeploysController < ApplicationController
-  before_action :set_deploy, only: [:show, :edit, :update, :destroy]
+  before_action :set_deploy, only: [:show, :edit, :update, :destroy, :upload]
 
   # GET /deploys
   # GET /deploys.json
   def index
-    @repos = Github::Client::Repos.new
+    @repos = Deploy.all
+    #@repos = Github::Client::Repos.new
   end
 
   # GET /deploys/1
   # GET /deploys/1.json
   def show
+    @repos = Github::Client::Repos.new
   end
 
   # GET /deploys/new
   def new
-    @deploy = Deploy.new
+    @form = CreateDeployForm.new
   end
 
-  # GET /deploys/1/edit
   def edit
   end
 
   # POST /deploys
   # POST /deploys.json
   def create
-    @deploy = Deploy.new(deploy_params)
+    @form = CreateDeployForm.new(deploy_form_params)
+    service = CreateDeployService.new(@form)
 
-    respond_to do |format|
-      if @deploy.save
-        format.html { redirect_to @deploy, notice: 'Deploy was successfully created.' }
-        format.json { render :show, status: :created, location: @deploy }
-      else
-        format.html { render :new }
-        format.json { render json: @deploy.errors, status: :unprocessable_entity }
-      end
+    if service.call
+      redirect_to deploys_path
+    else
+      render :new
     end
   end
 
+  def upload
+    app_name ='jarek-' + @deploy.repository_name
+    Dir.chdir("/home/czarek/Desktop/repos/#{@deploy.repository_name}") do
+      system "git checkout -b #{params[:branch_name]} origin/#{params[:branch_name]}"
+      system "heroku fork --from #{@deploy.repository_name} --to #{app_name}"
+      system "git remote add #{params[:branch_name]} https://git.heroku.com/#{app_name}.git"
+      system "git push #{params[:branch_name]} #{params[:branch_name]}:master"
+      system "heroku run rake db:migrate"
+    end
+    redirect_to deploy_path(@deploy.id)
+  end
   # PATCH/PUT /deploys/1
   # PATCH/PUT /deploys/1.json
   def update
@@ -71,4 +80,9 @@ class DeploysController < ApplicationController
     def deploy_params
       params.fetch(:deploy, {})
     end
+
+    def deploy_form_params
+      params.require(:deploy_form).permit(:github_link, :username, :repository_name)
+    end
+
 end

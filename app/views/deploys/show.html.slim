@@ -1,0 +1,9 @@
+table
+  thead
+    tr
+      th= 'Name'
+  tbody
+    - @repos.branches user: @deploy.username, repo: @deploy.repository_name do |branch|
+      tr
+        td= branch.name
+        td= link_to 'Upload to Heroku', upload_deploy_path(id: @deploy.id, branch_name: branch.name)

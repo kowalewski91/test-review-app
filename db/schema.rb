@@ -16,15 +16,12 @@ ActiveRecord::Schema.define(version: 20160603094811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "controllers", force: :cascade do |t|
-    t.string   "Deploy"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "deploys", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "github_link",     null: false
+    t.string   "username",        null: false
+    t.string   "repository_name", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
 end

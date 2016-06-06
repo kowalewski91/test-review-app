@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
-  resources :deploys
+  resources :deploys do
+    get :upload, on: :member
+  end
   root to: 'deploys#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
