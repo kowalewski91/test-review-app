@@ -26,6 +26,9 @@ gem 'pg', '~> 0.15'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'github_api'
+gem 'simple_form'
+gem 'slim-rails'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

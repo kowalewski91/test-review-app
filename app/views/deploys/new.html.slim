@@ -1,0 +1,2 @@
+= simple_form_for @form, as: :deploy_form, url: deploys_path, method: :post do |f|
+  == render partial: 'form', locals: { f: f }
