@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
 
   resources :deploys do
-    get :upload, on: :member
+    get :deploy_repository, on: :member
+    get :fetch_repository, on: :member
   end
   root to: 'deploys#index'
   # The priority is based upon order of creation: first created -> highest priority.

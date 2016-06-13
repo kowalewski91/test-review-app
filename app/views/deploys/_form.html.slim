@@ -1,7 +1,6 @@
 .fields
   = f.input :github_link
-  = f.input :username
-  = f.input :repository_name
+  = f.input :project_name
 .actions
   = link_to 'Back', deploys_path, class: 'btn btn-default'
   = f.submit 'Save', class: 'btn btn-primary'
