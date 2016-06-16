@@ -1,5 +1,5 @@
 class DeploysController < ApplicationController
-  before_action :set_deploy, only: [:show, :edit, :update, :destroy, :upload]
+  before_action :set_deploy, only: [:show, :edit, :update, :destroy, :deploy_repository, :fetch_repository]
 
   # GET /deploys
   # GET /deploys.json
@@ -11,7 +11,7 @@ class DeploysController < ApplicationController
   # GET /deploys/1
   # GET /deploys/1.json
   def show
-    @repos = Github::Client::Repos.new
+    @repo = Rugged::Repository.new("/home/jarek/Desktop/repos/#{@deploy.project_name}")
   end
 
   # GET /deploys/new
@@ -29,23 +29,32 @@ class DeploysController < ApplicationController
     service = CreateDeployService.new(@form)
 
     if service.call
+
       redirect_to deploys_path
     else
       render :new
     end
   end
 
-  def upload
-    app_name ='jarek-' + @deploy.repository_name
-    Dir.chdir("/home/czarek/Desktop/repos/#{@deploy.repository_name}") do
+  def deploy_repository
+    app_name =params[:branch_name] + '-' + @deploy.project_name
+    Dir.chdir("/home/jarek/Desktop/repos/#{@deploy.project_name}") do
       system "git checkout -b #{params[:branch_name]} origin/#{params[:branch_name]}"
-      system "heroku fork --from #{@deploy.repository_name} --to #{app_name}"
+      system "heroku fork --from #{@deploy.project_name} --to #{app_name}"
       system "git remote add #{params[:branch_name]} https://git.heroku.com/#{app_name}.git"
       system "git push #{params[:branch_name]} #{params[:branch_name]}:master"
       system "heroku run rake db:migrate"
     end
     redirect_to deploy_path(@deploy.id)
   end
+
+  def fetch_repository
+     Dir.chdir("/home/jarek/Desktop/repos/#{@deploy.project_name}") do
+       system "git fetch --all"
+     end
+     redirect_to deploy_path(@deploy.id)
+  end
+
   # PATCH/PUT /deploys/1
   # PATCH/PUT /deploys/1.json
   def update
@@ -82,7 +91,7 @@ class DeploysController < ApplicationController
     end
 
     def deploy_form_params
-      params.require(:deploy_form).permit(:github_link, :username, :repository_name)
+      params.require(:deploy_form).permit(:github_link, :project_name)
     end
 
 end

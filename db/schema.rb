@@ -17,11 +17,10 @@ ActiveRecord::Schema.define(version: 20160603094811) do
   enable_extension "plpgsql"
 
   create_table "deploys", force: :cascade do |t|
-    t.string   "github_link",     null: false
-    t.string   "username",        null: false
-    t.string   "repository_name", null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string   "github_link",  null: false
+    t.string   "project_name", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
 end

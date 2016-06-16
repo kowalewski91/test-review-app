@@ -3,6 +3,7 @@
 table
 - @repos.each do |repo|
   tr
-    td = repo.repository_name
+    td = repo.project_name
     td = link_to 'Show repository branches', deploy_path(repo.id)
     td = link_to 'Remove repository', deploy_path(repo.id), method: :delete
+

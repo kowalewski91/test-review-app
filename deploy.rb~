@@ -1,0 +1,3 @@
+system "heroku fork --from #{ARGV[0]} --to #{ARGV[1]}"
+system "git remote add #{ARGV[1]} https://git.heroku.com/userprofile2.git"
+system "git push #{ARGV[1]} #{ARGV[1]}:master"

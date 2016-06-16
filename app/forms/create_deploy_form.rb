@@ -3,15 +3,13 @@ class CreateDeployForm
 
   attr_accessor(
     :github_link,
-    :username,
-    :repository_name
+    :project_name
   )
 
   def attributes
     {
       github_link: github_link,
-      username: username,
-      repository_name: repository_name
+      project_name: project_name
     }
   end
 end

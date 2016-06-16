@@ -3,7 +3,9 @@ table
     tr
       th= 'Name'
   tbody
-    - @repos.branches user: @deploy.username, repo: @deploy.repository_name do |branch|
+    - @repo.branches.each_name().sort.each do |branch|
       tr
-        td= branch.name
-        td= link_to 'Upload to Heroku', upload_deploy_path(id: @deploy.id, branch_name: branch.name)
+        td= branch
+        td= link_to 'Upload to Heroku', deploy_repository_deploy_path(id: @deploy.id, branch_name: branch.split('/').last)
+    tr
+      th = link_to 'Refresh repository' , fetch_repository_deploy_path(@deploy.id)
