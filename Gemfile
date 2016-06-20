@@ -28,6 +28,7 @@ gem 'pg', '~> 0.15'
 gem 'github_api'
 gem 'simple_form'
 gem 'slim-rails'
+gem "figaro"
 gem 'rugged', git: 'git://github.com/libgit2/rugged.git', submodules: true
 # Use Unicorn as the app server
 # gem 'unicorn'

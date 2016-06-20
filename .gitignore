@@ -17,3 +17,6 @@
 /tmp
 /.idea/
 /deploy.rb
+# Ignore application configuration
+/config/application.yml
+/public/projects/*

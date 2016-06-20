@@ -1,20 +1,15 @@
 class DeploysController < ApplicationController
   before_action :set_deploy, only: [:show, :edit, :update, :destroy, :deploy_repository, :fetch_repository]
 
-  # GET /deploys
-  # GET /deploys.json
   def index
     @repos = Deploy.all
     #@repos = Github::Client::Repos.new
   end
 
-  # GET /deploys/1
-  # GET /deploys/1.json
   def show
-    @repo = Rugged::Repository.new("/home/jarek/Desktop/repos/#{@deploy.project_name}")
+    @repo = Rugged::Repository.new(Rails.root.join('public', 'projects', "#{@deploy.project_name}").to_s)
   end
 
-  # GET /deploys/new
   def new
     @form = CreateDeployForm.new
   end
@@ -22,8 +17,6 @@ class DeploysController < ApplicationController
   def edit
   end
 
-  # POST /deploys
-  # POST /deploys.json
   def create
     @form = CreateDeployForm.new(deploy_form_params)
     service = CreateDeployService.new(@form)
@@ -38,25 +31,24 @@ class DeploysController < ApplicationController
 
   def deploy_repository
     app_name =params[:branch_name] + '-' + @deploy.project_name
-    Dir.chdir("/home/jarek/Desktop/repos/#{@deploy.project_name}") do
+    Dir.chdir(Rails.root.join('public', 'projects', "#{@deploy.project_name}")) do
       system "git checkout -b #{params[:branch_name]} origin/#{params[:branch_name]}"
       system "heroku fork --from #{@deploy.project_name} --to #{app_name}"
       system "git remote add #{params[:branch_name]} https://git.heroku.com/#{app_name}.git"
       system "git push #{params[:branch_name]} #{params[:branch_name]}:master"
       system "heroku run rake db:migrate"
+      system "git remote remove #{params[:branch_name]}"
     end
     redirect_to deploy_path(@deploy.id)
   end
 
   def fetch_repository
-     Dir.chdir("/home/jarek/Desktop/repos/#{@deploy.project_name}") do
+     Dir.chdir(Rails.root.join('public', 'projects', "#{@deploy.project_name}")) do
        system "git fetch --all"
      end
      redirect_to deploy_path(@deploy.id)
   end
 
-  # PATCH/PUT /deploys/1
-  # PATCH/PUT /deploys/1.json
   def update
     respond_to do |format|
       if @deploy.update(deploy_params)
@@ -69,8 +61,6 @@ class DeploysController < ApplicationController
     end
   end
 
-  # DELETE /deploys/1
-  # DELETE /deploys/1.json
   def destroy
     @deploy.destroy
     respond_to do |format|

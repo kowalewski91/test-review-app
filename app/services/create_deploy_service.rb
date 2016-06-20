@@ -7,7 +7,7 @@ class CreateDeployService
 
   def call
     Deploy.create(@form.attributes)
-    Dir.chdir("/home/jarek/Desktop/repos") do
+    Dir.chdir(Rails.root.join('public', 'projects')) do
       system "git clone #{@form.github_link}"
     end
   end
