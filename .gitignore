@@ -16,6 +16,8 @@
 !/log/.keep
 /tmp
 /.idea/
+/.idea
+.idea
 /deploy.rb
 # Ignore application configuration
 /config/application.yml
