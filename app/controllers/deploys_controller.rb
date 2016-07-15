@@ -29,17 +29,36 @@ class DeploysController < ApplicationController
     end
   end
 
+  # def deploy_repository
+  #   app_name =params[:branch_name] + '-' + @deploy.project_name
+  #   Dir.chdir(Rails.root.join('public', 'projects', "#{@deploy.project_name}")) do
+  #     system "git checkout -b #{params[:branch_name]} origin/#{params[:branch_name]}"
+  #     system "heroku fork --from #{@deploy.project_name} --to #{app_name}"
+  #     system "git remote add #{params[:branch_name]} https://git.heroku.com/#{app_name}.git"
+  #     system "git push #{params[:branch_name]} #{params[:branch_name]}:master"
+  #     system "heroku run rake db:migrate"
+  #     system "git remote remove #{params[:branch_name]}"
+  #   end
+  #   redirect_to deploy_path(@deploy.id)
+  # end
+
   def deploy_repository
-    app_name =params[:branch_name] + '-' + @deploy.project_name
-    Dir.chdir(Rails.root.join('public', 'projects', "#{@deploy.project_name}")) do
-      system "git checkout -b #{params[:branch_name]} origin/#{params[:branch_name]}"
-      system "heroku fork --from #{@deploy.project_name} --to #{app_name}"
-      system "git remote add #{params[:branch_name]} https://git.heroku.com/#{app_name}.git"
-      system "git push #{params[:branch_name]} #{params[:branch_name]}:master"
-      system "heroku run rake db:migrate"
-      system "git remote remove #{params[:branch_name]}"
+    repo_name = app_name = params[:branch_name] + '-' + @deploy.project_name
+    branch_name = params[:branch_name]
+    repo_manager = RepoManager.new(app_name)
+    heroku_manager = HerokuManager.new(repo_manager)
+
+    begin
+      repo_manager.checkout(branch_name)
+      target_app_name = heroku_manager.fork(app_name, target_app_name) #TODO: find one from db, other from
+      # TODO: set the env variables
+      repo_manager.push(branch_name, HerokuManager.app_url(target_app_name))
+      heroku_manager.db_migrate(app_name)
+
+      true
+    rescue Exception => e
+      redirect_to deploys_path, alert: 'Not deployed'
     end
-    redirect_to deploy_path(@deploy.id)
   end
 
   def fetch_repository
