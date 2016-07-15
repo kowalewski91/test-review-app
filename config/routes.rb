@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :recipes
   resources :deploys do
     get :deploy_repository, on: :member
     get :fetch_repository, on: :member
