@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/libgit2/rugged.git
-  revision: 82182ec753617c1a67d87e826797cee88ab2e02e
-  submodules: true
-  specs:
-    rugged (0.25.0b4)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -206,7 +199,6 @@ DEPENDENCIES
   jquery-rails
   pg (~> 0.15)
   rails (= 4.2.5)
-  rugged!
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   simple_form
@@ -217,4 +209,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.12.4
+   1.12.5
